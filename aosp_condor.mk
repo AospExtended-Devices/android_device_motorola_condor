@@ -10,3 +10,4 @@ TARGET_SCREEN_WIDTH := 540
 ## Device identifier. This must come after all inclusions
 PRODUCT_NAME := aosp_condor
 PRODUCT_RELEASE_NAME := MOTO E
+PRODUCT_MODEL := XT1025
