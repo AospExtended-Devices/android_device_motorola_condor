@@ -16,20 +16,30 @@
 
 package com.cyanogenmod.settings.device;
 
+import java.util.List;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
+import android.content.IntentFilter;
 
-public class BootCompletedReceiver extends BroadcastReceiver {
+public class ScreenReceiver extends BroadcastReceiver {
+    private final ScreenStateNotifier mNotifier;
 
-    private static final boolean DEBUG = false;
-    private static final String TAG = "MotoDoze";
+    public ScreenReceiver(Context context, ScreenStateNotifier notifier) {
+        mNotifier = notifier;
 
-    @Override
-    public void onReceive(final Context context, Intent intent) {
-        if (DEBUG) Log.d(TAG, "Starting service");
-        context.startService(new Intent(context, MotoDozeService.class));
+        IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
+        filter.addAction(Intent.ACTION_SCREEN_OFF);
+        context.registerReceiver(this, filter);
     }
 
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
+            mNotifier.screenTurnedOff();
+        } else if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
+            mNotifier.screenTurnedOn();
+        }
+    }
 }
